@@ -10,8 +10,7 @@ Original file is located at
 import streamlit as st
 import pandas as pd
 import numpy as np
-from mlxtend.frequent_patterns import apriori
-from mlxtend.frequent_patterns import association_rules
+from mlxtend.frequent_patterns import apriori, association_rules
 
 df = pd.read_csv('/content/bread basket.csv')
 df['date_time'] = pd.to_datetime(df['date_time'],format='%d-%m-%Y %H:%M')
