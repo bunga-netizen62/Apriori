@@ -7,15 +7,17 @@ Original file is located at
     https://colab.research.google.com/drive/1O4nocjdDiJPfrDCJaoSxWf3wxqnBdQDn
 """
 
+!pip install streamlit
 import streamlit as st
 import pandas as pd
 import numpy as np
-from mlxtend.frequent_patterns import association_rules, apriori
+from mlxtend.frequent_patterns import apriori
+from mlxtend.frequent_patterns import association_rules
 
 df = pd.read_csv('/content/bread basket.csv')
 df['date_time'] = pd.to_datetime(df['date_time'],format='%d-%m-%Y %H:%M')
 df ['month'] = df['date_time'].dt.month
-df ['hour'] = df['date_time'].dt.hour
+df ['day'] = df['date_time'].dt.weekday
 
 df['month'].replace([i for i in range(1, 12 + 1)], ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], inplace = True)
 df['day'].replace([i for i in range(6 + 1)], ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], inplace = True)
@@ -27,9 +29,9 @@ def get_data(period_day = '', weekday_weekend = '', month = '', day = ''):
   data = df.copy()
   filtered = data.loc[
       (data['period_day'].str.contains(period_day)) &
-      (data['weekday_weekend'].isin(weekday_weekend)) &
-      (data['month'].isin(month.title())) &
-      (data['day'].isin(day.title()))
+      (data['weekday_weekend'].str.contains(weekday_weekend)) &
+      (data['month'].str.contains(month.title())) &
+      (data['day'].str.contains(day.title()))
   ]
   return filtered if filtered.shape[0] else "No Result!"
 
@@ -62,7 +64,7 @@ def user_input_features():
   weekday_weekend = st.selectbox("Weekday / Weekend",['Weekday', 'Weekend'])
   month = st.selectbox("Month",['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'])
   day = st.selectbox("Day",['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
-
+  
   return period_day, weekday_weekend, month, day, item
 
 period_day, weekday_weekend, month, day, item = user_input_features()
@@ -97,15 +99,14 @@ def parse_list(x):
     return ", ".join(x)
 
 def return_item_df(item_antecedents):
-  data = rules[['antecedents', 'consequents']].copy()
+  data = rules[["antecedents", "consequents"]].copy()
+
   data['antecedents'] = data['antecedents'].apply(parse_list)
   data['consequents'] = data['consequents'].apply(parse_list)
 
-  return list(data.loc[data['antecedents'] == item_antecedents].iloc[0,:])
+  return list(data.loc[data['antecedents'] == item_antecedents].iloc[0,:]).apply(parse_list)
 
 if type(data) != type("No Result!"):
   st.markdown("Hasil Rekomendasi : ")
   st.success(f"Jika Konsumen Membeli **{item}**, maka membeli {return_item_df(item)[1]}** secara bersamaan")
-
-
 
