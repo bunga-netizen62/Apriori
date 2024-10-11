@@ -34,35 +34,12 @@ def get_data(period_day = '', weekday_weekend = '', month = '', day = ''):
   ]
   return filtered if filtered.shape[0] else "No Result!"
 
-def user_input_features():
-  item = st.selectbox("Item",['Bread', 'Scandinavian', 'Hot chocolate', 'Jam', 'Cookies',
-       'Muffin', 'Coffee', 'Pastry', 'Medialuna', 'Tea',
-       'Tartine', 'Basket', 'Mineral water', 'Farm House', 'Fudge',
-       'Juice', "Ella's Kitchen Pouches", 'Victorian Sponge', 'Frittata',
-       'Hearty & Seasonal', 'Soup', 'Pick and Mix Bowls', 'Smoothies',
-       'Cake', 'Mighty Protein', 'Chicken sand', 'Coke',
-       'My-5 Fruit Shoot', 'Focaccia', 'Sandwich', 'Alfajores', 'Eggs',
-       'Brownie', 'Dulce de Leche', 'Honey', 'The BART', 'Granola',
-       'Fairy Doors', 'Empanadas', 'Keeping It Local', 'Art Tray',
-       'Bowl Nic Pitt', 'Bread Pudding', 'Adjustment', 'Truffles',
-       'Chimichurri Oil', 'Bacon', 'Spread', 'Kids biscuit', 'Siblings',
-       'Caramel bites', 'Jammie Dodgers', 'Tiffin', 'Olum & polenta',
-       'Polenta', 'The Nomad', 'Hack the stack', 'Bakewell',
-       'Lemon and coconut', 'Toast', 'Scone', 'Crepes', 'Vegan mincepie',
-       'Bare Popcorn', 'Muesli', 'Crisps', 'Pintxos', 'Gingerbread syrup',
-       'Panatone', 'Brioche and salami', 'Afternoon with the baker',
-       'Salad', 'Chicken Stew', 'Spanish Brunch',
-       'Raspberry shortbread sandwich', 'Extra Salami or Feta',
-       'Duck egg', 'Baguette', "Valentine's card", 'Tshirt',
-       'Vegan Feast', 'Postcard', 'Nomad bag', 'Chocolates',
-       'Coffee granules ', 'Drinking chocolate spoons ',
-       'Christmas common', 'Argentina Night', 'Half slice Monster ',
-       'Gift voucher', 'Cherry me Dried fruit', 'Mortimer', 'Raw bars',
-       'Tacos/Fajita'])
-  period_day = st.selectbox("Period of Day",['Morning', 'Afternoon', 'Evening', 'Night'])
-  weekday_weekend = st.selectbox("Weekday / Weekend",['Weekday', 'Weekend'])
-  month = st.selectbox("Month",['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'])
-  day = st.selectbox("Day",['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
+def user_input_feature(): 
+    item = st.selectbox("Item", df['Item'].unique())
+    period_day = st.selectbox("Period Day", df['period_day'].unique())
+    weekday_weekend = st.selectbox("Weekday Weekend", df['weekday_weekend'].unique())
+    month = st.select_slider("Month",  ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], value="January")
+    day = st.select_slider("Day", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], value="Saturday")
   
   return period_day, weekday_weekend, month, day, item
 
